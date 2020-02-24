@@ -24,7 +24,7 @@
 3. ***isMap***. Функция проверки субъекта на тип - object Map.
 > 
 >     function  isMap (collection) {  
->     	return  Object.prototype.toString.call(collection) ===  '[object Map]';  
+>         return  Object.prototype.toString.call(collection) ===  '[object Map]';  
 >     }
 4. ***isWeakMap***. Функция проверки субъекта на тип - object WeakMap.
 >
