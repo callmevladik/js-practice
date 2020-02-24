@@ -28,7 +28,7 @@
 >     }
 4. ***isWeakMap***. Функция проверки субъекта на тип - object WeakMap.
 >
->     function isSet (collection) {
+>     function isWeakMap (collection) {
 >         return Object.prototype.toString.call(collection) === '[object WeakMap]';
 >     }
 5. ***isSet***. Функция проверки субъекта на тип - object Set.
@@ -38,7 +38,7 @@
 >     }
 6. ***isWeakSet***. Функция проверки субъекта на тип - object WeakSet.
 >
->     function isSet (collection) {
+>     function isWeakSet (collection) {
 >         return Object.prototype.toString.call(collection) === '[object WeakSet]';
 >     }
 
@@ -61,5 +61,8 @@
 >             for (let [key, value] of collection) {
 >                 callback(value, key);
 >             }
+>         } else {
+>             throw 'Error: the subject is not a collection';
+>             return false;
 >         }
 >     }
