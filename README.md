@@ -49,15 +49,22 @@ function isWeakSet (collection) {
 	return Object.prototype.toString.call(collection) === '[object WeakSet]';
 }
 ```
+7. ***callbackCheck***. Функция проверки коллбэка на тип - function.
+```javascript
+function callbackCheck(callback) {
+    if(!typeof callback !== 'function') {
+        throw new TypeError(callback + ' is not a function');
+    }
+}
+```
 
 ## Коллекции
 
 2. ***Each***. Перебор массива или объекта с вызовом коллбека для каждого элемента
 ```javascript
 function each(collection, callback) {
-    if(!typeof callback !== 'function') {
-        throw new TypeError(callback + ' is not a function');
-    }
+    callbackCheck(callback);
+    
     if (isArray(collection)) {
         for (let i = 0; i < collection.length; i++) {
             let el = collection[i];

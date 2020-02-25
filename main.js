@@ -33,10 +33,15 @@ function isWeakSet (collection) {
 	return Object.prototype.toString.call(collection) === '[object WeakSet]';
 }
 
-function each(collection, callback) {
+function callbackCheck(callback) {
     if(!typeof callback !== 'function') {
         throw new TypeError(callback + ' is not a function');
     }
+}
+
+function each(collection, callback) {
+    callbackCheck(callback);
+
     if (isArray(collection)) {
         for (let i = 0; i < collection.length; i++) {
             let el = collection[i];
@@ -53,6 +58,5 @@ function each(collection, callback) {
         }
     } else {
         throw new TypeError(collection + ' is not a collection');
-        return false;
     }
 }
