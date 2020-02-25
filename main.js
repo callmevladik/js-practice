@@ -64,8 +64,8 @@ function each(collection, callback) {
 function map(collection, callback) {
     callbackCheck(callback);
 
-    let collectionLength = collection.length;
-    let map = Array(collectionLength);
+    const collectionLength = collection.length;
+    const map = Array(collectionLength);
     let mappedValue;
     let k = 0;
     if (isArray(collection)) {
