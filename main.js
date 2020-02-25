@@ -34,7 +34,7 @@ function isWeakSet (collection) {
 }
 
 function callbackCheck(callback) {
-    if(!typeof callback !== 'function') {
+    if(!typeof callback === 'function') {
         throw new TypeError(callback + ' is not a function');
     }
 }
@@ -44,19 +44,51 @@ function each(collection, callback) {
 
     if (isArray(collection)) {
         for (let i = 0; i < collection.length; i++) {
-            let el = collection[i];
-            callback(el, i);
+            let value = collection[i];
+            callback(value, i);
         }
     } else if (isObject(collection)) {
         for (let key in collection) {
-            let el = collection[key];
-            callback(el, key);
+            let value = collection[key];
+            callback(value, prop);
         }
     } else if (isMap(collection) || isWeakMap(collection) || isSet(collection) || isWeakSet(collection)) {
-        for (let [key, value] of collection) {
-            callback(value, key);
+        for (let [prop, value] of collection) {
+            callback(value, prop);
         }
     } else {
         throw new TypeError(collection + ' is not a collection');
     }
+}
+
+function map(collection, callback) {
+    callbackCheck(callback);
+
+    let collectionLength = collection.length;
+    let map = Array(collectionLength);
+    let mappedValue;
+    let k = 0;
+    if (isArray(collection)) {
+        for (let i = 0; i < collectionLength; i++) {
+            mappedValue = collection[i];
+            map[k] = callback(mappedValue);
+            k++;
+        }
+    } else if (isObject(collection)) {
+        for (let prop in collection) {
+            mappedValue = collection[prop];
+            map[k] = callback(mappedValue);
+            k++;
+        }
+    } else if (isMap(collection) || isWeakMap(collection) || isSet(collection) || isWeakSet(collection)) {
+        for (let [prop, value] of collection) {
+            mappedValue = value;
+            map[k] = callback(mappedValue);
+            k++;
+        }
+    } else {
+        throw new TypeError(collection + ' is not a collection');
+    }
+
+    return map;
 }

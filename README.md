@@ -60,7 +60,7 @@ function callbackCheck(callback) {
 
 ## Коллекции
 
-2. ***Each***. Перебор массива или объекта с вызовом коллбека для каждого элемента
+1. ***Each***. Перебор массива или объекта с вызовом коллбека для каждого элемента.
 ```javascript
 function each(collection, callback) {
     callbackCheck(callback);
@@ -82,5 +82,39 @@ function each(collection, callback) {
     } else {
         throw new TypeError(collection + ' is not a collection');
     }
+}
+```
+2. ***Map***. Создание нового массива на основе данного с вызовом коллбэка для каждого его элемента.
+```javascript
+function map(collection, callback) {
+    callbackCheck(callback);
+
+    let collectionLength = collection.length;
+    let map = Array(collectionLength);
+    let mappedValue;
+    let k = 0;
+    if (isArray(collection)) {
+        for (let i = 0; i < collectionLength; i++) {
+            mappedValue = collection[i];
+            map[k] = callback(mappedValue);
+            k++;
+        }
+    } else if (isObject(collection)) {
+        for (let prop in collection) {
+            mappedValue = collection[prop];
+            map[k] = callback(mappedValue);
+            k++;
+        }
+    } else if (isMap(collection) || isWeakMap(collection) || isSet(collection) || isWeakSet(collection)) {
+        for (let [prop, value] of collection) {
+            mappedValue = value;
+            map[k] = callback(mappedValue);
+            k++;
+        }
+    } else {
+        throw new TypeError(collection + ' is not a collection');
+    }
+
+    return map;
 }
 ```
