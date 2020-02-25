@@ -1,7 +1,3 @@
-## Хелперы
-
- 1. ***isArray***. Функция проверки объекта на тип - object Array.
-```javascript
 function isArray (obj) {
     if (Array.isArray) {
         if (Array.isArray(obj)) {
@@ -16,44 +12,27 @@ function isArray (obj) {
         return false;
     }
 }
-```
-2. ***isObject***. Функция проверки объекта на тип - object Object.
-> 
-```javascript
+
 function isObject (collection) {
 	return Object.prototype.toString.call(collection) === '[object Object]';
 }
-```
 
-3. ***isMap***. Функция проверки объекта на тип - object Map.
-```javascript
 function  isMap (collection) {  
 	return  Object.prototype.toString.call(collection) ===  '[object Map]';  
 }
-```
-4. ***isWeakMap***. Функция проверки объекта на тип - object WeakMap.
-```javascript
+
 function isWeakMap (collection) {
 	return Object.prototype.toString.call(collection) === '[object WeakMap]';
 }
-```
-5. ***isSet***. Функция проверки объекта на тип - object Set.
-```javascript
+
 function isSet (collection) {
 	return Object.prototype.toString.call(collection) === '[object Set]';
 }
-```
-6. ***isWeakSet***. Функция проверки объекта на тип - object WeakSet.
-```javascript
+
 function isWeakSet (collection) {
 	return Object.prototype.toString.call(collection) === '[object WeakSet]';
 }
-```
 
-## Коллекции
-
-2. ***Each***. Перебор массива или объекта с вызовом коллбека для каждого элемента
-```javascript
 function each(collection, callback) {
     if(!typeof callback !== 'function') {
         throw new TypeError(callback + ' is not a function');
@@ -77,4 +56,3 @@ function each(collection, callback) {
         return false;
     }
 }
-```
