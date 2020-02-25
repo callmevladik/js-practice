@@ -81,7 +81,6 @@ function each(collection, callback) {
         }
     } else {
         throw new TypeError(collection + ' is not a collection');
-        return false;
     }
 }
 ```
