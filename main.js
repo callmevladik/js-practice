@@ -39,25 +39,47 @@ function callbackCheck(callback) {
     }
 }
 
+function collectionCheck(collection) {
+    let collectionInfo;
+    if (typeof collection === 'object' && typeof collection !== null) {
+        collectionInfo = new Object();
+    } else {
+        throw new TypeError(collection + ' is not a collection')
+    }
+    
+    collectionInfo.length = isArray(collection) || isObject(collection) ? collection.length : collection.size;
+
+    collectionInfo.type = isArray(collection) ? '[object Array]' : 
+    isObject(collection) ? '[object Object]' : 
+    isMap(collection) ? '[object Map]' :
+    isWeakMap(collection) ? '[object WeakMap]' : 
+    isSet(collection) ? '[object Set]' : 
+    isWeakSet(collection) ? '[object WeakSet]': null;
+
+    return collectionInfo;
+}
+
 function each(collection, callback) {
     callbackCheck(callback);
+    let collectionInfo = collectionCheck(collection);
 
-    if (isArray(collection)) {
-        for (let i = 0; i < collection.length; i++) {
+    if (collectionInfo.type === '[object Array]') {
+        for (let i = 0; i < collectionInfo.length; i++) {
             let value = collection[i];
             callback(value, i);
         }
-    } else if (isObject(collection)) {
+    } else if (collectionInfo.type === '[object Object]') {
         for (let key in collection) {
             let value = collection[key];
             callback(value, prop);
         }
-    } else if (isMap(collection) || isWeakMap(collection) || isSet(collection) || isWeakSet(collection)) {
+    } else if (collectionInfo.type === '[object Map]' 
+        || collectionInfo.type === '[object WeakMap]' 
+        || collectionInfo.type === '[object Set]' 
+        || collectionInfo.type === '[object WeakSet]') {
         for (let [prop, value] of collection) {
             callback(value, prop);
         }
-    } else {
-        throw new TypeError(collection + ' is not a collection');
     }
 }
 
@@ -91,4 +113,19 @@ function map(collection, callback) {
     }
 
     return map;
+}
+
+function reduce(collection, callback, accum) {
+    callbackCheck(callback);
+    let i = !accum ? 1 : 0;
+    accum = !accum ? collection[0] : accum;
+    if (isArray(collection)) {
+        for (; i < collection.length; i++) {
+            let value = collection[i];
+            accum = callback(accum, value, i);
+        }
+        return accum;
+    } else {
+        throw new TypeError(collection + ' is not a collection');
+    }
 }
