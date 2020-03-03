@@ -1,49 +1,32 @@
-function isArray (collection) {
-    return Object.prototype.toString.call(collection) === '[object Array]';
-}
+const objectType = 'object';
+const objectFunctionType = 'function';
+const objectObjectType = '[object Object]';
+const objectArrayType = '[object Array]';
+const objectMapType = '[object Map]';
+const objectWeakMapType = '[object WeakMap]';
+const objectSetType = '[object Set]';
+const objectWeakSetType = '[object WeakSet]';
 
-function isObject (collection) {
-	return Object.prototype.toString.call(collection) === '[object Object]';
-}
-
-function isMap (collection) {  
-	return  Object.prototype.toString.call(collection) === '[object Map]';  
-}
-
-function isWeakMap (collection) {
-	return Object.prototype.toString.call(collection) === '[object WeakMap]';
-}
-
-function isSet (collection) {
-	return Object.prototype.toString.call(collection) === '[object Set]';
-}
-
-function isWeakSet (collection) {
-	return Object.prototype.toString.call(collection) === '[object WeakSet]';
+function collectionTypeCheck(collection) {
+    return Object.prototype.toString.call(collection);
 }
 
 function callbackCheck(callback) {
-    if(!typeof callback === 'function') {
+    if(!typeof callback === objectFunctionType) {
         throw new TypeError(callback + ' is not a function');
     }
 }
 
 function getCollectionProps(collection) {
     let collectionProps;
-    if (typeof collection === 'object' && typeof collection !== null) {
+    if (typeof collection === objectType && typeof collection !== null) {
         collectionProps = new Object();
     } else {
         throw new TypeError(collection + ' is not a collection')
     }
     
-    collectionProps.length = isArray(collection) || isObject(collection) ? collection.length : collection.size;
-
-    collectionProps.type = isArray(collection) ? '[object Array]' : 
-    isObject(collection) ? '[object Object]' : 
-    isMap(collection) ? '[object Map]' :
-    isWeakMap(collection) ? '[object WeakMap]' : 
-    isSet(collection) ? '[object Set]' : 
-    isWeakSet(collection) ? '[object WeakSet]': null;
+    collectionProps.type = collectionTypeCheck(collection);
+    collectionProps.length = collectionTypeCheck(collection) === objectArrayType || collectionTypeCheck(collection) === objectObjectType ? collection.length : collection.size;
 
     return collectionProps;
 }
@@ -53,20 +36,20 @@ function each(collection, callback) {
 
     callbackCheck(callback);
 
-    if (collectionProps.type === '[object Array]') {
+    if (collectionProps.type === objectArrayType) {
         for (let i = 0; i < collectionProps.length; i++) {
             let value = collection[i];
             callback(value, i);
         }
-    } else if (collectionProps.type === '[object Object]') {
+    } else if (collectionProps.type === objectObjectType) {
         for (let key in collection) {
             let value = collection[key];
             callback(value, prop);
         }
-    } else if (collectionProps.type === '[object Map]' 
-        || collectionProps.type === '[object WeakMap]' 
-        || collectionProps.type === '[object Set]' 
-        || collectionProps.type === '[object WeakSet]') {
+    } else if (collectionProps.type === objectMapType 
+        || collectionProps.type === objectWeakMapType 
+        || collectionProps.type === objectSetType 
+        || collectionProps.type === objectWeakSetType) {
         for (let [prop, value] of collection) {
             callback(value, prop);
         }
@@ -81,22 +64,22 @@ function map(collection, callback) {
     const map = Array(collectionProps.length);
     let mappedValue;
     let k = 0;
-    if (collectionProps.type === '[object Array]') {
+    if (collectionProps.type === objectArrayType) {
         for (let i = 0; i < collectionProps.length; i++) {
             mappedValue = collection[i];
             map[k] = callback(mappedValue);
             k++;
         }
-    } else if (collectionProps.type === '[object Object]') {
+    } else if (collectionProps.type === objectObjectType) {
         for (let prop in collection) {
             mappedValue = collection[prop];
             map[k] = callback(mappedValue);
             k++;
         }
-    } else if (collectionProps.type === '[object Map]' 
-        || collectionProps.type === '[object WeakMap]' 
-        || collectionProps.type === '[object Set]' 
-        || collectionProps.type === '[object WeakSet]') {
+    } else if (collectionProps.type === objectMapType 
+        || collectionProps.type === objectWeakMapType 
+        || collectionProps.type === objectSetType 
+        || collectionProps.type === objectWeakSetType) {
         for (let [prop, value] of collection) {
             mappedValue = value;
             map[k] = callback(mappedValue);
@@ -114,7 +97,7 @@ function reduce(collection, callback, accum) {
 
     let i = !accum ? 1 : 0;
     accum = !accum ? collection[0] : accum;
-    if (collectionProps.type === '[object Array]') {
+    if (collectionProps.type === objectArrayType) {
         for (; i < collectionProps.length; i++) {
             let value = collection[i];
             accum = callback(accum, value, i);
